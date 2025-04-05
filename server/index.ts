@@ -1,3 +1,4 @@
+import { webcrypto } from 'crypto';
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
@@ -65,7 +66,7 @@ app.use((req, res, next) => {
   // this serves both the API and the client.
   // It is the only port that is not firewalled.
   try {
-    const port = 5000;
+    const port = 5001;
     
     // Try to ensure the port is available
     server.on('error', (error: any) => {
