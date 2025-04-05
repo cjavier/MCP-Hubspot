@@ -1,6 +1,10 @@
 import { webcrypto } from 'crypto';
-// Polyfill crypto for Node.js
-global.crypto = webcrypto as any;
+// Use Object.defineProperty for crypto polyfill
+Object.defineProperty(global, 'crypto', {
+  value: webcrypto,
+  writable: true,
+  configurable: true
+});
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
