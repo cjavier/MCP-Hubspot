@@ -10,14 +10,14 @@ export function startMcpServer(httpServer: Server) {
 
   // Handle WebSocket connections
   wss.on("connection", (ws) => {
-    console.log("MCP client connected");
+    console.error("MCP client connected");
 
     // Listen for messages from the client
     ws.on("message", async (message) => {
       let request;
       try {
         request = JSON.parse(message.toString());
-        console.log("Received MCP request:", request);
+        console.error("Received MCP request:", request);
 
         // Handle different types of requests
         if (request.type === "describe") {
@@ -93,9 +93,9 @@ export function startMcpServer(httpServer: Server) {
 
     // Handle disconnections
     ws.on("close", () => {
-      console.log("MCP client disconnected");
+      console.error("MCP client disconnected");
     });
   });
 
-  console.log("MCP server started");
+  console.error("MCP server started");
 }

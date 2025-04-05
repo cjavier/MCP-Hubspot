@@ -9,6 +9,23 @@ export async function testHubspotContact(contactId: string) {
   }
 }
 
+export async function createHubspotContact(contactData: { 
+  email: string;
+  firstname?: string;
+  lastname?: string;
+  phone?: string;
+  company?: string;
+  jobtitle?: string;
+  [key: string]: string | undefined;
+}) {
+  try {
+    const response = await apiRequest("POST", "/api/hubspot/create-contact", contactData);
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function updateHubspotConfig(token: string) {
   try {
     const response = await apiRequest("POST", "/api/hubspot/config", { token });

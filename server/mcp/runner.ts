@@ -1,4 +1,5 @@
 import { getContactByIdTask } from "./tasks/hubspot/getContactById";
+import { createContactTask } from "./tasks/hubspot/createContact";
 
 // TaskManifest interface based on MCP specification
 interface TaskParam {
@@ -28,7 +29,7 @@ class TaskRunner {
   // Register a new task
   register(manifest: TaskManifest, fn: TaskFunction) {
     this.tasks.set(manifest.name, { manifest, fn });
-    console.log(`Registered task: ${manifest.name}`);
+    console.error(`Registered task: ${manifest.name}`);
   }
 
   // Get all task manifests
@@ -76,4 +77,51 @@ runner.register(
     ],
   },
   getContactByIdTask
+);
+
+// Register create contact task
+runner.register(
+  {
+    name: "hubspot:createContact",
+    description: "Creates a new contact in HubSpot",
+    parameters: [
+      {
+        name: "email",
+        type: "string",
+        description: "Email address of the contact (required)",
+        required: true,
+      },
+      {
+        name: "firstname",
+        type: "string",
+        description: "First name of the contact",
+        required: false,
+      },
+      {
+        name: "lastname",
+        type: "string",
+        description: "Last name of the contact",
+        required: false,
+      },
+      {
+        name: "phone",
+        type: "string",
+        description: "Phone number of the contact",
+        required: false,
+      },
+      {
+        name: "company",
+        type: "string",
+        description: "Company name of the contact",
+        required: false,
+      },
+      {
+        name: "jobtitle",
+        type: "string",
+        description: "Job title of the contact",
+        required: false,
+      }
+    ],
+  },
+  createContactTask
 );

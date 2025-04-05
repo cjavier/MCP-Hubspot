@@ -2,7 +2,7 @@ import type { Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { startMcpServer } from "./mcp";
-import { getHubspotContact } from "./mcp/hubspotApi";
+import { getHubspotContact, createHubspotContact } from "./mcp/hubspotApi";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // HubSpot API configuration routes
@@ -36,7 +36,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Test HubSpot Contact endpoint
+  // Get HubSpot Contact endpoint
   app.post('/api/hubspot/contact', async (req: Request, res: Response) => {
     try {
       const { contactId } = req.body;
@@ -60,6 +60,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     }
   });
+  
+  // Create HubSpot Contact endpoint
+  app.post('/api/hubspot/create-contact', async (req: Request, res: Response) => {
+    try {
+      const { email, firstname, lastname, phone, company, jobtitle, ...otherProps } = req.body;
+      
+      if (!email) {
+        return res.status(400).json({ error: "Email is required" });
+      }
+      
+      const config = await storage.getHubspotConfig();
+      
+      if (!config) {
+        return res.status(400).json({ error: "HubSpot API token not configured" });
+      }
+      
+      // Prepare contact properties
+      const contactProperties = {
+        email,
+        ...(firstname && { firstname }),
+        ...(lastname && { lastname }),
+        ...(phone && { phone }),
+        ...(company && { company }),
+        ...(jobtitle && { jobtitle }),
+        ...otherProps
+      };
+      
+      const contact = await createHubspotContact(contactProperties, config.token);
+      res.json(contact);
+    } catch (error) {
+      console.error("Error creating HubSpot contact:", error);
+      res.status(500).json({ 
+        error: error instanceof Error ? error.message : "Failed to create contact" 
+      });
+    }
+  });
 
   // Server status endpoint
   app.get('/api/server/status', async (req: Request, res: Response) => {
@@ -70,7 +106,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const logs = await storage.getLatestMcpLogs(5);
       const totalRequests = logs.length;
-      const lastRequest = logs.length > 0 ? formatTimeAgo(logs[0].createdAt) : "Never";
+      let lastRequest = "Never";
+      if (logs.length > 0 && logs[0].createdAt) {
+        lastRequest = formatTimeAgo(logs[0].createdAt);
+      }
       
       res.json({
         status: "active",
@@ -111,7 +150,9 @@ function formatUptime(ms: number): string {
   }
 }
 
-function formatTimeAgo(date: Date): string {
+function formatTimeAgo(date: Date | null): string {
+  if (!date) return "Never";
+  
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
   const diffSeconds = Math.floor(diffMs / 1000);
