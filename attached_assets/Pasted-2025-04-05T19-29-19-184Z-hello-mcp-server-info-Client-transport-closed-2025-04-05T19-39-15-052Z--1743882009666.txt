@@ -1,0 +1,21 @@
+2025-04-05T19:29:19.184Z [hello-mcp-server] [info] Client transport closed
+2025-04-05T19:39:15.052Z [hello-mcp-server] [info] Initializing server...
+2025-04-05T19:39:15.075Z [hello-mcp-server] [info] Server started and connected successfully
+2025-04-05T19:39:15.076Z [hello-mcp-server] [info] Message from client: {"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"claude-ai","version":"0.1.0"}},"jsonrpc":"2.0","id":0}
+Registered task: hubspot:getContactById
+Registered task: hubspot:createContact
+MCP server started
+file:///Users/javiergarcia/Apps/MCP/MCP-Hubspot/node_modules/vite/dist/node/chunks/dep-CHZK6zbr.js:66562
+      crypto$2.getRandomValues(new Uint8Array(9))
+               ^
+
+TypeError: crypto$2.getRandomValues is not a function
+    at resolveConfig (file:///Users/javiergarcia/Apps/MCP/MCP-Hubspot/node_modules/vite/dist/node/chunks/dep-CHZK6zbr.js:66562:16)
+    at async _createServer (file:///Users/javiergarcia/Apps/MCP/MCP-Hubspot/node_modules/vite/dist/node/chunks/dep-CHZK6zbr.js:62908:18)
+    at async setupVite (file:///Users/javiergarcia/Apps/MCP/MCP-Hubspot/dist/index.js:561:16)
+    at async file:///Users/javiergarcia/Apps/MCP/MCP-Hubspot/dist/index.js:647:5
+2025-04-05T19:39:15.380Z [hello-mcp-server] [info] Server transport closed
+2025-04-05T19:39:15.380Z [hello-mcp-server] [info] Client transport closed
+2025-04-05T19:39:15.380Z [hello-mcp-server] [info] Server transport closed unexpectedly, this is likely due to the process exiting early. If you are developing this MCP server you can add output to stderr (i.e. `console.error('...')` in JavaScript, `print('...', file=sys.stderr)` in python) and it will appear in this log.
+2025-04-05T19:39:15.380Z [hello-mcp-server] [error] Server disconnected. For troubleshooting guidance, please visit our [debugging documentation](https://modelcontextprotocol.io/docs/tools/debugging) {"context":"connection"}
+2025-04-05T19:39:15.380Z [hello-mcp-server] [info] Client transport closed
